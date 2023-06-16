@@ -1,0 +1,78 @@
+# # deployment.yaml
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: damiaks
+# spec:
+#   replicas: 2
+#   selector: 
+#     matchLabels: 
+#       app: damiaks
+#   template: 
+#     metadata:
+#       labels:
+#         app: damiaks
+#     spec:
+#       containers:
+#         - image: damiaks.azurecr.io/gabrepo:latest #damiaks.azurecr.io/gabrepo:latest
+#           name: damiaks
+#           resources:
+#             requests:
+#               cpu: 100m
+#               memory: 128Mi
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#           ports:
+#             - containerPort: 80
+#               name: http
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: blue-site
+#   labels:
+#     app: blue-site
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: blue-site
+#   template:
+#     metadata:
+#       labels:
+#         app: blue-site
+#     spec:
+#       containers:
+#       - name:  blue-site
+#         image: damsconas/blue-site
+#         ports:
+#         - containerPort: 80
+
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: damiaks
+spec:
+  selector: # Define the wrapping strategy
+    matchLabels: # Match all pods with the defined labels
+      app: damiaks # Labels follow the `name: value` template
+  template: # This is the template of the pod inside the deployment
+    metadata:
+      labels:
+        app: damiaks
+    spec:
+      containers:
+        - image: ugogabriel/damiaks:v1
+          name: damiaks
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          ports:
+            - containerPort: 80
+              name: http
